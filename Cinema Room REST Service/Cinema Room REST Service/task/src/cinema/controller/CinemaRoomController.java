@@ -3,10 +3,7 @@ package cinema.controller;
 import cinema.model.*;
 import cinema.service.CinemaRoomService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class CinemaRoomController {
@@ -27,5 +24,10 @@ public class CinemaRoomController {
     @PostMapping("/return")
     Ticket returnTicket(@RequestBody TicketToken token) {
         return cinemaRoomService.returnTicket(token.getToken());
+    }
+
+    @PostMapping("/stats")
+    Statistics showStats(@RequestParam(required = false) String password) {
+        return cinemaRoomService.showStats(password);
     }
 }

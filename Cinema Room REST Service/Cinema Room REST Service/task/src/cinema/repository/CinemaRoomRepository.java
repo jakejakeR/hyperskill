@@ -52,4 +52,12 @@ public class CinemaRoomRepository {
         availableSeats.add(returnedSeat);
         return new Ticket(returnedSeat);
     }
+
+    public int calcIncome() {
+        return purchasedSeats.values()
+                .stream()
+                .map(Customer::getTicket)
+                .mapToInt(Seat::getPrice)
+                .sum();
+    }
 }
