@@ -4,10 +4,8 @@ import cinema.config.CinemaRoomProperties;
 import cinema.exception.InvalidTokenException;
 import cinema.exception.OutOfBoundsException;
 import cinema.exception.SeatNotAvailableException;
-import cinema.model.CinemaRoom;
-import cinema.model.Customer;
-import cinema.model.Seat;
-import cinema.model.Ticket;
+import cinema.exception.WrongPasswordException;
+import cinema.model.*;
 import cinema.repository.CinemaRoomRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +20,8 @@ public class CinemaRoomServiceImpl implements CinemaRoomService {
     CinemaRoomRepository repo;
     @Autowired
     CinemaRoomProperties cinemaRoomProperties;
+
+    static final String SECRET_PASSWORD = "super_secret";
 
     @Override
     public CinemaRoom getAvailableSeats() {
@@ -48,6 +48,20 @@ public class CinemaRoomServiceImpl implements CinemaRoomService {
     public Ticket returnTicket(UUID token) {
         if (!repo.isValid(token)) throw new InvalidTokenException();
         return repo.returnTicket(token);
+    }
+
+    @Override
+    public Statistics showStats(String password) {
+        if (!isPasswordCorrect(password)) throw new WrongPasswordException();
+        return Statistics.builder()
+                .currentIncome(repo.calcIncome())
+                .numberOfAvailableSeats(repo.getAvailableSeats().size())
+                .numberOfPurchasedTickets(repo.getPurchasedSeats().size())
+                .build();
+    }
+
+    private boolean isPasswordCorrect(String password) {
+        return SECRET_PASSWORD.equals(password);
     }
 
     private int calcPrice(Seat seat) {
