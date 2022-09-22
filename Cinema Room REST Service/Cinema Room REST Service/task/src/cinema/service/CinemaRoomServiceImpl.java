@@ -47,14 +47,14 @@ public class CinemaRoomServiceImpl implements CinemaRoomService {
     @Override
     public Ticket returnTicket(UUID token) {
         if (!repo.isValid(token)) throw new InvalidTokenException();
-        return repo.returnTicket(token);
+        return returnTicketToRepo(token);
     }
 
     @Override
     public Statistics showStats(String password) {
         if (!isPasswordCorrect(password)) throw new WrongPasswordException();
         return Statistics.builder()
-                .currentIncome(repo.calcIncome())
+                .currentIncome(calcIncome())
                 .numberOfAvailableSeats(repo.getAvailableSeats().size())
                 .numberOfPurchasedTickets(repo.getPurchasedSeats().size())
                 .build();
@@ -72,6 +72,21 @@ public class CinemaRoomServiceImpl implements CinemaRoomService {
 
     private void setPrice(Seat seat) {
         seat.setPrice(calcPrice(seat));
+    }
+
+    private Ticket returnTicketToRepo(UUID token) {
+        Seat returnedSeat = repo.getPurchasedSeats().remove(token).getTicket();
+        repo.getAvailableSeats().add(returnedSeat);
+        return new Ticket(returnedSeat);
+    }
+
+    private int calcIncome() {
+        return repo.getPurchasedSeats()
+                .values()
+                .stream()
+                .map(Customer::getTicket)
+                .mapToInt(Seat::getPrice)
+                .sum();
     }
 
     private boolean isOutOfBounds(Seat seat) {
