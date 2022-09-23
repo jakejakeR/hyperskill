@@ -244,3 +244,29 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle,java,intellij,jetbrains
+/settings.gradle
+/Anti-Fraud System/Authentication/task.html
+/Anti-Fraud System/Authorization/task.html
+/Anti-Fraud System/Feedback/task.html
+/Anti-Fraud System/Rule-based system/task.html
+/Anti-Fraud System/Simple transaction validation/task.html
+/Anti-Fraud System/Stolen cards   suspicious IPs/task.html
+/Anti-Fraud System/Authentication/task-info.yaml
+/Anti-Fraud System/Authorization/task-info.yaml
+/Anti-Fraud System/Feedback/task-info.yaml
+/Anti-Fraud System/Rule-based system/task-info.yaml
+/Anti-Fraud System/Simple transaction validation/task-info.yaml
+/Anti-Fraud System/Stolen cards   suspicious IPs/task-info.yaml
+/Anti-Fraud System/Authentication/task-remote-info.yaml
+/Anti-Fraud System/Authorization/task-remote-info.yaml
+/Anti-Fraud System/Feedback/task-remote-info.yaml
+/Anti-Fraud System/Rule-based system/task-remote-info.yaml
+/Anti-Fraud System/Simple transaction validation/task-remote-info.yaml
+/Anti-Fraud System/Stolen cards   suspicious IPs/task-remote-info.yaml
+/Anti-Fraud System/lesson-info.yaml
+/gradlew.bat
+/gradlew
+/course-remote-info.yaml
+/course-info.yaml
+/build.gradle
+/Anti-Fraud System/task/test/AntiFraudTest.java
