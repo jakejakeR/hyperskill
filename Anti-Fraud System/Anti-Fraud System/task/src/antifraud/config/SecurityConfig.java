@@ -1,4 +1,50 @@
 package antifraud.config;
 
+import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
+
+@EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        // @formatter:off
+        http.httpBasic()
+                    .authenticationEntryPoint(restAuthenticationEntryPoint()) // Handles auth error
+                .and()
+                    .csrf().disable()
+                    .headers().frameOptions().disable()
+                .and()
+                    .authorizeRequests() // manage access
+                        .mvcMatchers(HttpMethod.POST, "/api/auth/user").permitAll()
+                        .mvcMatchers("/actuator/shutdown").permitAll() // needs to run test
+                .and()
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // no session
+        // @formatter:on
+
+        return http.build();
+    }
+
+    @Bean
+    AuthenticationEntryPoint restAuthenticationEntryPoint() {
+        return (request, response, authException) -> response.sendError(
+                HttpStatus.UNAUTHORIZED.value(), authException.getMessage());
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
