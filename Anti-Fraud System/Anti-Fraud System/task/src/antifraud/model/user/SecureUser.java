@@ -1,6 +1,5 @@
 package antifraud.model.user;
 
-import antifraud.model.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,7 +17,7 @@ public class SecureUser implements DefaultSecureUser {
     private final User user;
     Long id;
     String name;
-    Role role;
+    String role;
 
     public SecureUser(User user) {
         this.user = user;
@@ -35,7 +34,7 @@ public class SecureUser implements DefaultSecureUser {
         return name;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
@@ -54,7 +53,7 @@ public class SecureUser implements DefaultSecureUser {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+        authorities.add(new SimpleGrantedAuthority(user.getRole()));
         return authorities;
     }
 

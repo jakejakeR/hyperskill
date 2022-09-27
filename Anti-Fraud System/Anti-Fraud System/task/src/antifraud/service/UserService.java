@@ -1,6 +1,6 @@
 package antifraud.service;
 
-import antifraud.model.Role;
+import antifraud.model.RoleStr;
 import antifraud.model.user.SecureUser;
 import antifraud.model.user.User;
 import antifraud.repository.UserRepository;
@@ -40,10 +40,10 @@ public class UserService implements UserDetailsService {
         }
 
         if (userRepository.count() == 0) {
-            user.setRole(Role.ADMINISTRATOR);
+            user.setRole(RoleStr.ADMINISTRATOR);
             user.setAccountNonLocked(true);
         } else {
-            user.setRole(Role.MERCHANT);
+            user.setRole(RoleStr.MERCHANT);
             user.setAccountNonLocked(false);
         }
 

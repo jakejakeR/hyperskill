@@ -5,6 +5,7 @@ import antifraud.model.user.User;
 import antifraud.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,6 +27,7 @@ public class UserController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMINISTRATOR', 'SUPPORT')")
     @GetMapping("/list")
     public List<SecureUser> listUsers() {
         return userService.listUsers();

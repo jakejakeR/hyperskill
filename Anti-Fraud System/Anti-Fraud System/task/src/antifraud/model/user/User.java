@@ -1,6 +1,5 @@
 package antifraud.model.user;
 
-import antifraud.model.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -31,8 +30,8 @@ public class User {
     private String password;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Role role;
+    private String role;
 
     @JsonIgnore
-    private boolean accountNonLocked = false;
+    private boolean accountNonLocked;
 }
