@@ -1,7 +1,7 @@
 package antifraud.controller;
 
-import antifraud.model.TransactionRequest;
-import antifraud.model.TransactionResponse;
+import antifraud.model.transaction.TransactionRequest;
+import antifraud.model.transaction.TransactionResponse;
 import antifraud.service.TransactionService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,4 @@
-package antifraud.model;
+package antifraud.model.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -13,15 +13,15 @@ import javax.validation.constraints.NotBlank;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotBlank
     private String name;
 
-    @Column(unique = true)
     @NotBlank
+    @Column(unique = true)
     private String username;
 
     @NotBlank

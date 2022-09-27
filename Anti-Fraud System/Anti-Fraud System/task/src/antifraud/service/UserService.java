@@ -1,7 +1,7 @@
 package antifraud.service;
 
-import antifraud.model.SecureUser;
-import antifraud.model.User;
+import antifraud.model.user.SecureUser;
+import antifraud.model.user.User;
 import antifraud.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +29,6 @@ public class UserService implements UserDetailsService {
 
     public Optional<SecureUser> register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return Optional.of(new SecureUser(user));
+        return Optional.of(new SecureUser(userRepository.save(user)));
     }
 }

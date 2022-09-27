@@ -1,6 +1,6 @@
 package antifraud.service;
 
-import antifraud.model.Result;
+import antifraud.model.transaction.Result;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,5 +1,6 @@
-package antifraud.model;
+package antifraud.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,17 +14,31 @@ public class SecureUser implements UserDetails {
     private static final long serialVersionUID = -6690946490872875352L;
 
     private final User user;
+    Long id;
+    String name;
 
     public SecureUser(User user) {
         this.user = user;
+        this.id = user.getId();
+        this.name = user.getName();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return user.getPassword();
     }
@@ -34,21 +49,25 @@ public class SecureUser implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return true;
     }

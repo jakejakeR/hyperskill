@@ -1,10 +1,10 @@
 package antifraud.controller;
 
-import antifraud.model.User;
+import antifraud.model.user.SecureUser;
+import antifraud.model.user.User;
 import antifraud.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,7 +19,7 @@ public class UserController {
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDetails register(@Valid @RequestBody User user) {
+    public SecureUser register(@Valid @RequestBody User user) {
         return userService.register(user)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT));
     }
