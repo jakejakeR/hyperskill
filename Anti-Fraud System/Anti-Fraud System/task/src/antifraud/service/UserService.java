@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
             user.setAccountNonLocked(true);
         } else {
             user.setRole(Role.MERCHANT);
-            user.setAccountNonLocked(true);
+            user.setAccountNonLocked(false);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
