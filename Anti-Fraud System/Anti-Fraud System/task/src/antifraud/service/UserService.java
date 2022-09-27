@@ -28,6 +28,9 @@ public class UserService implements UserDetailsService {
     }
 
     public Optional<SecureUser> register(User user) {
+        if (userRepository.existsByUsernameIgnoreCase(user.getUsername())) {
+            return Optional.empty();
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return Optional.of(new SecureUser(userRepository.save(user)));
     }
