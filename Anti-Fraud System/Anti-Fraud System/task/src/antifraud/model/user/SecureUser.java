@@ -57,4 +57,9 @@ public class SecureUser implements DefaultSecureUser {
         authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
         return authorities;
     }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return user.isAccountNonLocked();
+    }
 }
