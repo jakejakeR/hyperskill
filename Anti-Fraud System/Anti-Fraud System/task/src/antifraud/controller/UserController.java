@@ -33,6 +33,7 @@ public class UserController {
         return userService.listUsers();
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @DeleteMapping("/user/{username}")
     public Map<String, String> deleteUser(@PathVariable String username) {
         return userService.deleteUser(username)
