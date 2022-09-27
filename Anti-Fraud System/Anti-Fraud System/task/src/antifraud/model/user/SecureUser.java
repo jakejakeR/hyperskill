@@ -39,8 +39,8 @@ public class SecureUser implements DefaultSecureUser {
         return role;
     }
 
-    @Override
     @JsonIgnore
+    @Override
     public String getPassword() {
         return user.getPassword();
     }
@@ -50,6 +50,7 @@ public class SecureUser implements DefaultSecureUser {
         return user.getUsername();
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
