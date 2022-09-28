@@ -42,7 +42,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // What does it do????
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
