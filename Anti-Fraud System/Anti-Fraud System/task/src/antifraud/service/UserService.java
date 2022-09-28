@@ -7,11 +7,13 @@ import antifraud.model.user.User;
 import antifraud.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -74,7 +76,19 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    public Optional<SecureUser> changeRole(ChangeRoleRequest changeRoleRequest) {
-        return Optional.empty();
+    @Transactional
+    public SecureUser changeRole(ChangeRoleRequest changeRoleRequest) {
+
+        Optional<User> userFromDb = userRepository.findByUsernameIgnoreCase(changeRoleRequest.getUsername());
+        User user = userFromDb.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        String role = changeRoleRequest.getRole();
+        if (Role.ADMINISTRATOR.equals(role)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } else if (user.getRole().equals(role)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+
+        return new SecureUser(userRepository.save(user));
     }
 }

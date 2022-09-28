@@ -41,10 +41,10 @@ public class UserController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @PutMapping("/role")
     public SecureUser changeRole(@Valid @RequestBody ChangeRoleRequest changeRoleRequest) {
-        return userService.changeRole(changeRoleRequest)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return userService.changeRole(changeRoleRequest);
     }
 
     // ResponseEntity - 52:40
