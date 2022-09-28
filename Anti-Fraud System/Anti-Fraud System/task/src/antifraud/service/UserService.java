@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
             user.setAccountNonLocked(true);
         } else {
             user.setRole(Role.MERCHANT);
-            user.setAccountNonLocked(false);
+            user.setAccountNonLocked(true);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -88,6 +88,8 @@ public class UserService implements UserDetailsService {
         } else if (user.getRole().equals(role)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
+
+        user.setRole(role);
 
         return new SecureUser(userRepository.save(user));
     }

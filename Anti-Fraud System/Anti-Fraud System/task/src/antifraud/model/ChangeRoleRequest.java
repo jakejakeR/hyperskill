@@ -1,10 +1,14 @@
 package antifraud.model;
 
-import lombok.Value;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
-@Value
+@Getter
+@Setter
+@NoArgsConstructor
 public class ChangeRoleRequest {
     @NotBlank
     String username;
