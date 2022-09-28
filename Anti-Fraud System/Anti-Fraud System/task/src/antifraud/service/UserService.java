@@ -1,5 +1,6 @@
 package antifraud.service;
 
+import antifraud.model.ChangeRoleRequest;
 import antifraud.model.Role;
 import antifraud.model.user.SecureUser;
 import antifraud.model.user.User;
@@ -71,5 +72,9 @@ public class UserService implements UserDetailsService {
                         "status", "Deleted successfully!"
                 )
         );
+    }
+
+    public Optional<SecureUser> changeRole(ChangeRoleRequest changeRoleRequest) {
+        return Optional.empty();
     }
 }

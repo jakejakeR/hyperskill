@@ -1,5 +1,6 @@
 package antifraud.controller;
 
+import antifraud.model.ChangeRoleRequest;
 import antifraud.model.user.SecureUser;
 import antifraud.model.user.User;
 import antifraud.service.UserService;
@@ -39,4 +40,12 @@ public class UserController {
         return userService.deleteUser(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
+
+    @PutMapping("/role")
+    public SecureUser changeRole(@Valid @RequestBody ChangeRoleRequest changeRoleRequest) {
+        return userService.changeRole(changeRoleRequest)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    // ResponseEntity - 52:40
 }
