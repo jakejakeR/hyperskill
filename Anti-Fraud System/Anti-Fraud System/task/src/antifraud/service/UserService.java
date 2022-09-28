@@ -1,7 +1,9 @@
 package antifraud.service;
 
-import antifraud.model.ChangeRoleRequest;
-import antifraud.model.Role;
+import antifraud.model.access.Access;
+import antifraud.model.access.ChangeAccessRequest;
+import antifraud.model.role.ChangeRoleRequest;
+import antifraud.model.role.Role;
 import antifraud.model.user.SecureUser;
 import antifraud.model.user.User;
 import antifraud.repository.UserRepository;
@@ -47,7 +49,7 @@ public class UserService implements UserDetailsService {
             user.setAccountNonLocked(true);
         } else {
             user.setRole(Role.MERCHANT);
-            user.setAccountNonLocked(true);
+            user.setAccountNonLocked(false);
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -78,19 +80,49 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public SecureUser changeRole(ChangeRoleRequest changeRoleRequest) {
-
-        Optional<User> userFromDb = userRepository.findByUsernameIgnoreCase(changeRoleRequest.getUsername());
-        User user = userFromDb.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User user = getUserFromDb(changeRoleRequest.getUsername());
 
         String role = changeRoleRequest.getRole();
-        if (Role.ADMINISTRATOR.equals(role)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        } else if (user.getRole().equals(role)) {
+        checkIfNotAdmin(role);
+
+        if (user.getRole().equals(role)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-
         user.setRole(role);
-
         return new SecureUser(userRepository.save(user));
+    }
+
+    @Transactional
+    public Map<String, String> changeAccess(ChangeAccessRequest changeAccessRequest) {
+        User user = getUserFromDb(changeAccessRequest.getUsername());
+        checkIfNotAdmin(user.getRole());
+
+        if (Access.UNLOCK.equals(changeAccessRequest.getOperation())) {
+            user.setAccountNonLocked(true);
+        } else if (Access.LOCK.equals(changeAccessRequest.getOperation())) {
+            user.setAccountNonLocked(false);
+        }
+
+        userRepository.save(user);
+
+        String message = String.format(
+                "User %s %s!",
+                user.getUsername(),
+                user.isAccountNonLocked()
+                        ? Access.UNLOCK_MESSAGE
+                        : Access.LOCK_MESSAGE
+        );
+        return Map.of("status", message);
+    }
+
+    private void checkIfNotAdmin(String role) {
+        if (Role.ADMINISTRATOR.equals(role)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private User getUserFromDb(String username) {
+        Optional<User> userFromDb = userRepository.findByUsernameIgnoreCase(username);
+        return userFromDb.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

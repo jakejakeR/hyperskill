@@ -1,6 +1,7 @@
 package antifraud.controller;
 
-import antifraud.model.ChangeRoleRequest;
+import antifraud.model.access.ChangeAccessRequest;
+import antifraud.model.role.ChangeRoleRequest;
 import antifraud.model.user.SecureUser;
 import antifraud.model.user.User;
 import antifraud.service.UserService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +38,7 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @DeleteMapping("/user/{username}")
-    public Map<String, String> deleteUser(@PathVariable String username) {
+    public Map<String, String> deleteUser(@PathVariable @NotBlank String username) {
         return userService.deleteUser(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
@@ -47,5 +49,9 @@ public class UserController {
         return userService.changeRole(changeRoleRequest);
     }
 
-    // ResponseEntity - 52:40
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
+    @PutMapping("/access")
+    public Map<String, String> changeAccess(@Valid @RequestBody ChangeAccessRequest changeAccessRequest) {
+        return userService.changeAccess(changeAccessRequest);
+    }
 }

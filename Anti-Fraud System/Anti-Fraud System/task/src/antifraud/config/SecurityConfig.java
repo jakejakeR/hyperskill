@@ -31,6 +31,7 @@ public class SecurityConfig {
                     .authorizeRequests() // manage access
                         .mvcMatchers(HttpMethod.POST, "/api/auth/user").permitAll()
                         .mvcMatchers("/actuator/shutdown").permitAll() // needs to run test
+                        .mvcMatchers(HttpMethod.DELETE, "/api/auth/user/*").hasAuthority("ADMINISTRATOR")
                         .mvcMatchers("/api/**").authenticated()
                 .and()
                     .sessionManagement()

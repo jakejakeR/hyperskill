@@ -17,7 +17,7 @@ public class TransactionController {
 
     public final TransactionService transactionService;
 
-    @PreAuthorize("hasAuthority('SUPPORT')")
+    @PreAuthorize("hasAuthority('MERCHANT')")
     @PostMapping("/api/antifraud/transaction")
     TransactionResponse purchase(@Valid @RequestBody TransactionRequest request) {
         return TransactionResponse.of(

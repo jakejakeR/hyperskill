@@ -1,4 +1,4 @@
-package antifraud.model;
+package antifraud.model.role;
 
 public class Role {
     public static final String ADMINISTRATOR = "ADMINISTRATOR";
