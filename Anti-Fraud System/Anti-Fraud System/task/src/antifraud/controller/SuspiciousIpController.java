@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -33,13 +34,18 @@ public class SuspiciousIpController {
     }
 
     @DeleteMapping("/{ip}")
-    public Map<String, String> deleteUser(@PathVariable("ip") @Ipv4 String ip) {
+    public Map<String, String> delete(@PathVariable("ip") @Ipv4 String ip) {
         return service.deleteSuspiciousIp(ip)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/")
-    public void deleteUser() {
+    public void delete() {
         throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping
+    public List<SuspiciousIp> list() {
+        return service.listSuspiciousIps();
     }
 }

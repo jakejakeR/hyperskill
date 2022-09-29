@@ -3,9 +3,11 @@ package antifraud.service;
 import antifraud.model.ip.SuspiciousIp;
 import antifraud.repository.SuspiciousIpRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,5 +32,13 @@ public class SuspiciousIpService {
         return Optional.of(
                 Map.of("status", String.format("IP %s successfully removed!", ip))
         );
+    }
+
+    public List<SuspiciousIp> listSuspiciousIps() {
+        return repository
+                .findAll(Sort
+                        .sort(SuspiciousIp.class)
+                        .by(SuspiciousIp::getId)
+                        .ascending());
     }
 }
