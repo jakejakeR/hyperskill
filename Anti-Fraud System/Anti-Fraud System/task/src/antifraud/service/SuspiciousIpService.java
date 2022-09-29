@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -19,5 +20,15 @@ public class SuspiciousIpService {
             return Optional.empty();
         }
         return Optional.of(repository.save(suspiciousIp));
+    }
+
+    @Transactional
+    public Optional<Map<String, String>> deleteSuspiciousIp(String ip) {
+        if (repository.deleteByIp(ip) == 0) {
+            return Optional.empty();
+        }
+        return Optional.of(
+                Map.of("status", String.format("IP %s successfully removed!", ip))
+        );
     }
 }
