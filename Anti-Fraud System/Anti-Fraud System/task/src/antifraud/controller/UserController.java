@@ -44,6 +44,12 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
+    @DeleteMapping("/user/")
+    public void deleteUser() {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    }
+
+    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
     @PutMapping("/role")
     public SecureUser changeRole(@Valid @RequestBody ChangeRoleRequest changeRoleRequest) {
         return userService.changeRole(changeRoleRequest);
