@@ -31,13 +31,13 @@ public class TransactionService {
 
         boolean isBlackIp = suspiciousIpRepository.existsByIp(transaction.getIp());
         boolean isBlackCard = stolenCardRepository.existsByNumber(transaction.getNumber());
-        boolean isAmountToHigh = amount > 1500;
+        boolean isAmountTooHigh = amount > 1500;
 
-        if (isAmountToHigh && isBlackCard && isBlackIp) {
+        if (isAmountTooHigh && isBlackCard && isBlackIp) {
             return new TransactionResponse(Result.PROHIBITED, AMOUNT_CARD_IP);
-        } else if (isAmountToHigh && isBlackCard) {
+        } else if (isAmountTooHigh && isBlackCard) {
             return new TransactionResponse(Result.PROHIBITED, AMOUNT_CARD);
-        } else if (isAmountToHigh && isBlackIp) {
+        } else if (isAmountTooHigh && isBlackIp) {
             return new TransactionResponse(Result.PROHIBITED, AMOUNT_IP);
         } else if (isBlackCard && isBlackIp) {
             return new TransactionResponse(Result.PROHIBITED, CARD_IP);
