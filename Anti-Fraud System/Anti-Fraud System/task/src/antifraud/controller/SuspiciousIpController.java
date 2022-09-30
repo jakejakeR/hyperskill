@@ -4,7 +4,6 @@ import antifraud.model.ip.SuspiciousIp;
 import antifraud.service.SuspiciousIpService;
 import antifraud.validation.Ipv4;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -15,7 +14,6 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
-@Slf4j
 @Validated
 @RestController
 @PreAuthorize("hasAuthority('SUPPORT')")
@@ -28,7 +26,6 @@ public class SuspiciousIpController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SuspiciousIp register(@Valid @RequestBody SuspiciousIp ip) {
-        log.info("IP: {}", ip);
         return service.register(ip)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT));
     }
