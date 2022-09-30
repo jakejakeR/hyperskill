@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @PreAuthorize("hasAuthority('SUPPORT')")
@@ -23,5 +25,21 @@ public class SolenCardController {
     public StolenCard register(@Valid @RequestBody StolenCard card) {
         return service.register(card)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT));
+    }
+
+    @DeleteMapping("/{number}")
+    public Map<String, String> delete(@PathVariable("number") String number) {
+        return service.deleteStolenCard(number)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @DeleteMapping("/")
+    public void delete() {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping
+    public List<StolenCard> list() {
+        return service.listStolenCards();
     }
 }
