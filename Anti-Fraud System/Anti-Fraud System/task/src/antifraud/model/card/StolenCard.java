@@ -1,9 +1,9 @@
-package antifraud.model.ip;
+package antifraud.model.card;
 
-import antifraud.validation.Ipv4;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.CreditCardNumber;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,14 +14,14 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Getter
 @Setter
-public class SuspiciousIp {
+public class StolenCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
-    @Ipv4
     @NotBlank
-    private String ip;
+    @CreditCardNumber
+    private String number;
 }
