@@ -29,15 +29,13 @@ public class SuspiciousIpController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT));
     }
 
-    @DeleteMapping("/{ip}")
-    public Map<String, String> delete(@PathVariable("ip") @Ipv4 String ip) {
+    @DeleteMapping({"/{ip}", ""})
+    public Map<String, String> delete(@PathVariable(required = false) @Ipv4 String ip) {
+        if (ip == null) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         return service.deleteSuspiciousIp(ip)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
-    @DeleteMapping("/")
-    public void delete() {
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
     @GetMapping

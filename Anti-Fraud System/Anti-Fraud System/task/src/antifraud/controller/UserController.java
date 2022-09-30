@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Map;
 
@@ -39,16 +38,13 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @DeleteMapping("/user/{username}")
-    public Map<String, String> deleteUser(@PathVariable("username") @NotBlank String username) {
+    @DeleteMapping({"/user/{username}", "/user"})
+    public Map<String, String> deleteUser(@PathVariable(required = false) String username) {
+        if (username == null) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         return userService.deleteUser(username)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
-    @PreAuthorize("hasAuthority('ADMINISTRATOR')")
-    @DeleteMapping("/user/")
-    public void deleteUser() {
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
     @PreAuthorize("hasAuthority('ADMINISTRATOR')")

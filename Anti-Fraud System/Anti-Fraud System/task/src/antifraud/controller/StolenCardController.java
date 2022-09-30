@@ -19,7 +19,7 @@ import java.util.Map;
 @PreAuthorize("hasAuthority('SUPPORT')")
 @RequestMapping("/api/antifraud/stolencard")
 @AllArgsConstructor
-public class SolenCardController {
+public class StolenCardController {
 
     StolenCardService service;
 
@@ -29,15 +29,13 @@ public class SolenCardController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT));
     }
 
-    @DeleteMapping("/{number}")
-    public Map<String, String> delete(@PathVariable("number") @CreditCardNumber String number) {
+    @DeleteMapping({"/{number}", ""})
+    public Map<String, String> delete(@PathVariable(required = false) @CreditCardNumber String number) {
+        if (number == null) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         return service.deleteStolenCard(number)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
-    @DeleteMapping("/")
-    public void delete() {
-        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
     @GetMapping
