@@ -1,18 +1,54 @@
 package antifraud.service;
 
 import antifraud.model.transaction.Result;
+import antifraud.model.transaction.TransactionRequest;
+import antifraud.model.transaction.TransactionResponse;
+import antifraud.repository.StolenCardRepository;
+import antifraud.repository.SuspiciousIpRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class TransactionService {
 
-    public Result process(Long amount) {
+    private static final String AMOUNT_CARD_IP = "amount, card-number, ip";
+    private static final String AMOUNT_CARD = "amount, card-number";
+    private static final String AMOUNT_IP = "amount, ip";
+    private static final String CARD_IP = "card-number, ip";
+    private static final String AMOUNT = "amount";
+
+    StolenCardRepository stolenCardRepository;
+    SuspiciousIpRepository suspiciousIpRepository;
+
+    public TransactionResponse process(TransactionRequest request) {
+
+        Long amount = request.getAmount();
+
+        boolean isBlackIp = suspiciousIpRepository.existsByIp(request.getIp());
+        boolean isBlackCard = stolenCardRepository.existsByNumber(request.getNumber());
+        boolean isAmountToHigh = amount > 1500;
+
+        if (isAmountToHigh && isBlackCard && isBlackIp) {
+            return new TransactionResponse(Result.PROHIBITED, AMOUNT_CARD_IP);
+        } else if (isAmountToHigh && isBlackCard) {
+            return new TransactionResponse(Result.PROHIBITED, AMOUNT_CARD);
+        } else if (isAmountToHigh && isBlackIp) {
+            return new TransactionResponse(Result.PROHIBITED, AMOUNT_IP);
+        } else if (isBlackCard && isBlackIp) {
+            return new TransactionResponse(Result.PROHIBITED, CARD_IP);
+        } else if (isBlackCard) {
+            return new TransactionResponse(Result.PROHIBITED, "card-number");
+        } else if (isBlackIp) {
+            return new TransactionResponse(Result.PROHIBITED, "ip");
+        }
+
         if (amount <= 200) {
-            return Result.ALLOWED;
+            return new TransactionResponse(Result.ALLOWED, "none");
         } else if (amount <= 1500) {
-            return Result.MANUAL_PROCESSING;
+            return new TransactionResponse(Result.MANUAL_PROCESSING, AMOUNT);
         } else {
-            return Result.PROHIBITED;
+            return new TransactionResponse(Result.PROHIBITED, AMOUNT);
         }
     }
 }

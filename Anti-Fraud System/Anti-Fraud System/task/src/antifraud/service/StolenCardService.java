@@ -31,7 +31,7 @@ public class StolenCardService {
             return Optional.empty();
         }
         return Optional.of(
-                Map.of("status", String.format("Card  %s successfully removed!", number))
+                Map.of("status", String.format("Card %s successfully removed!", number))
         );
     }
 

@@ -24,7 +24,6 @@ public class SuspiciousIpController {
     SuspiciousIpService service;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public SuspiciousIp register(@Valid @RequestBody SuspiciousIp ip) {
         return service.register(ip)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.CONFLICT));
