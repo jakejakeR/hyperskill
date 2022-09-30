@@ -5,6 +5,7 @@ import antifraud.model.transaction.TransactionRequest;
 import antifraud.model.transaction.TransactionResponse;
 import antifraud.repository.StolenCardRepository;
 import antifraud.repository.SuspiciousIpRepository;
+import antifraud.repository.TransactionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +21,16 @@ public class TransactionService {
 
     StolenCardRepository stolenCardRepository;
     SuspiciousIpRepository suspiciousIpRepository;
+    TransactionRepository transactionRepository;
 
-    public TransactionResponse process(TransactionRequest request) {
+    public TransactionResponse process(TransactionRequest transaction) {
 
-        Long amount = request.getAmount();
+        transactionRepository.save(transaction);
 
-        boolean isBlackIp = suspiciousIpRepository.existsByIp(request.getIp());
-        boolean isBlackCard = stolenCardRepository.existsByNumber(request.getNumber());
+        Long amount = transaction.getAmount();
+
+        boolean isBlackIp = suspiciousIpRepository.existsByIp(transaction.getIp());
+        boolean isBlackCard = stolenCardRepository.existsByNumber(transaction.getNumber());
         boolean isAmountToHigh = amount > 1500;
 
         if (isAmountToHigh && isBlackCard && isBlackIp) {
