@@ -90,7 +90,7 @@ public class TransactionService {
                 (result == cardNumberCheck ? "card-number " : "") +
                 (result == ipCheck ? "ip " : "") +
                 (result == ipCorrelationCheck ? "ip-correlation " : "") +
-                (result == regionCorrelationCheck ? "region-correlation " : "");
+                (result == regionCorrelationCheck ? "region-correlation" : "");
 
         return new TransactionResponse(result, info.trim().replace(" ", ", "));
     }
