@@ -5,9 +5,9 @@ import antifraud.validation.Ipv4;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
 import javax.persistence.*;
@@ -19,8 +19,9 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@ToString
+@Table(name = "transactions")
 @RequiredArgsConstructor
-@NoArgsConstructor
 public class TransactionRequest {
 
     @Id
@@ -36,9 +37,8 @@ public class TransactionRequest {
     @Ipv4
     @NotBlank
     private String ip;
-    @Enumerated
     @AvailableRegion(enumClass = Region.class)
-    private Region region;
+    private String region;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime date;
 }

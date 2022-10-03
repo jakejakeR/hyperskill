@@ -3,7 +3,6 @@ package antifraud.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class RegionValidator implements ConstraintValidator<AvailableRegion, CharSequence> {
@@ -13,7 +12,7 @@ public class RegionValidator implements ConstraintValidator<AvailableRegion, Cha
     public void initialize(AvailableRegion annotation) {
         acceptedValues = Stream.of(annotation.enumClass().getEnumConstants())
                 .map(Enum::name)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
