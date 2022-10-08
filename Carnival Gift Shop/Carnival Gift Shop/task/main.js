@@ -20,6 +20,10 @@ gifts = {
 
 const showGifts = () => {
     console.log("Here's the list of gifts:\n");
+    if (Object.keys(gifts).length === 0) {
+        console.log("Wow! There are no gifts to buy.");
+        return;
+    }
     for (const [id, data] of Object.entries(gifts)) {
         console.log(`${id}- ${data.name}, Cost: ${data.price} tickets`)
     }
@@ -33,38 +37,48 @@ What do you want to do?
 
 let tickets = 0;
 
-const isValid = (input) => {
-    if (Number.isNaN(input)) {
-        console.log("Wrong input.");
-        return false;
-    }
-    return true;
-}
-
 const buyGift = () => {
+    if (Object.keys(gifts).length === 0) {
+        console.log("Wow! There are no gifts to buy.");
+        return;
+    }
+
     const giftId = Number(input(("Enter the number of the gift you want to get: ")));
 
-    if (!isValid(giftId)) return;
-    if (giftId in gifts) {
-        console.log(`Here you go, one ${gifts[giftId].name}!`);
-        tickets -= gifts[giftId].price;
-        checkTickets();
-        delete gifts[giftId];
-    } else {
-        console.log(`There's no gift with id: ${giftId}.`);
+    if (Number.isNaN(giftId)) {
+        console.log("Please enter a valid number!");
+        return;
     }
+
+    if (!(giftId in gifts)) {
+        console.log("There is no gift with that number!");
+        return;
+    }
+
+    if (gifts[giftId].price > tickets) {
+        console.log("You don't have enough tickets to buy this gift.");
+        return;
+    }
+
+    console.log(`Here you go, one ${gifts[giftId].name}!`);
+    tickets -= gifts[giftId].price;
+    checkTickets();
+    delete gifts[giftId];
 }
 
 const addTickets = () => {
     const toAdd = Number(input("Enter the ticket amount: "));
-    if (!isValid(toAdd)) return;
+    if (Number.isNaN(toAdd) || toAdd < 0 || toAdd > 1000) {
+        console.log("Please enter a valid number between 0 and 1000.");
+        return;
+    }
     tickets += toAdd;
     checkTickets();
 };
 
 const checkTickets = () => {
-    console.log(`Total tickets: ${tickets}
-Have a nice day!`);
+    console.log(`Total tickets: ${tickets}`);
+    printHaveANiceDay();
 };
 
 const printHaveANiceDay = () => {
@@ -90,17 +104,16 @@ const handleChoice = () => {
                 break;
             case "4":
                 showGifts();
-                printHaveANiceDay();
                 break;
             case "5":
                 isRunning = false;
-                printHaveANiceDay();
                 break;
             default:
-                console.log("Not available option.");
+                console.log("Please enter a valid number!");
                 break;
         }
     }
+    printHaveANiceDay();
 }
 
 printWelcomeMessage();
