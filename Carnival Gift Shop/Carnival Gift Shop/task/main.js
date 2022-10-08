@@ -28,10 +28,10 @@ const showGifts = () => {
 const printMenu = () => {
     console.log(`
 What do you want to do?
-1-Buy a gift 2-Add tickets 3-Check tickets 4-Show gifts`)
+1-Buy a gift 2-Add tickets 3-Check tickets 4-Show gifts 5-Exit the shop`)
 };
 
-let tickets = 100;
+let tickets = 0;
 
 const isValid = (input) => {
     if (Number.isNaN(input)) {
@@ -49,6 +49,7 @@ const buyGift = () => {
         console.log(`Here you go, one ${gifts[giftId].name}!`);
         tickets -= gifts[giftId].price;
         checkTickets();
+        delete gifts[giftId];
     } else {
         console.log(`There's no gift with id: ${giftId}.`);
     }
@@ -66,27 +67,39 @@ const checkTickets = () => {
 Have a nice day!`);
 };
 
-const handleChoice = () => {
-    printMenu();
+const printHaveANiceDay = () => {
+    console.log("Have a nice day!");
+}
 
-    const choice = input();
-    switch (choice) {
-        case "1":
-            buyGift();
-            break;
-        case "2":
-            addTickets();
-            break;
-        case "3":
-            checkTickets();
-            break;
-        case "4":
-            showGifts();
-            console.log("Have a nice day!");
-            break;
-        default:
-            console.log("Not available option.");
-            break;
+const handleChoice = () => {
+    let isRunning = true;
+
+    while (isRunning) {
+        printMenu();
+        const choice = input();
+
+        switch (choice) {
+            case "1":
+                buyGift();
+                break;
+            case "2":
+                addTickets();
+                break;
+            case "3":
+                checkTickets();
+                break;
+            case "4":
+                showGifts();
+                printHaveANiceDay();
+                break;
+            case "5":
+                isRunning = false;
+                printHaveANiceDay();
+                break;
+            default:
+                console.log("Not available option.");
+                break;
+        }
     }
 }
 
